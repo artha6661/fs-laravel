@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\BankUser;
 use App\Http\Controllers\Api\BankUserController;
+use App\Http\Controllers\PassportAuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,10 +20,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/home',[BankUserController::class,'index']);
+//Security
 
-Route::post('/bankuser',[BankUserController::class,'store']);
+Route::post('/register',[PassportAuthController::class, 'register']);
 
-Route::put('/bankuser/{id}',[BankUserController::class,'update']);
+Route::post('/login',[PassportAuthController::class, 'login']);
 
-Route::delete('/bankuser/{id}',[BankUserController::class,'destroy']);
+Route::middleware('auth:api')->group(function()
+{
+    Route::get('/home',[BankUserController::class,'index']);
+
+    Route::post('/bankuser',[BankUserController::class,'store']);
+
+    Route::put('/bankuser/{id}',[BankUserController::class,'update']);
+
+    Route::delete('/bankuser/{id}',[BankUserController::class,'destroy']);
+});
+
+

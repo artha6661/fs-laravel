@@ -20,16 +20,11 @@ class BankUserController extends Controller
      */
     public function index()
     {
-
-        return BankUser::all();
+        $users = BankUser::all();
+        return $this->sendResponse($users, "Data Loaded Successfully!");
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    //INSERT
     public function store(Request $request)
     {
         try{
@@ -41,7 +36,8 @@ class BankUserController extends Controller
             ]);
 
             if($validator->fails()){
-                return response() -> json(['error' => $validator->errors()]);
+                $errors= $validator->errors();
+                return $this -> sendError($errors,"Wrong Input, Need Data Required");
             }
             return BankUser::create($request->all());
 
